@@ -1,0 +1,6 @@
+<div *ngIf="cliente">
+  <h3>{{ cliente.nombre }} {{ cliente.apellido }}</h3>
+  <p>Email: {{ cliente.email }}</p>
+  <p>Fecha de Creación: {{ cliente.createAt }}</p>
+  <button (click)="deleteCliente(cliente.id)" class="btn btn-danger">Eliminar</button>
+</div>

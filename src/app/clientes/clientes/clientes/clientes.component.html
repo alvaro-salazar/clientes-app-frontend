@@ -1,0 +1,12 @@
+<div class="container">
+  <h2>Lista de Clientes</h2>
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let cliente of clientes">
+      <span>{{ cliente.nombre }} {{ cliente.apellido }}</span>
+      <div>
+        <fa-icon [icon]="faEdit" (click)="editCliente(cliente)"></fa-icon>
+        <fa-icon [icon]="faTrash" (click)="confirmDelete(cliente.id)"></fa-icon>
+      </div>
+    </li>
+  </ul>
+</div>
