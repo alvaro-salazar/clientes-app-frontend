@@ -6,17 +6,21 @@ import { ClientesComponent } from './clientes/clientes/clientes.component';
 import { ClienteDetalleComponent } from './clientes/cliente-detalle/cliente-detalle.component';
 import {provideHttpClient} from '@angular/common/http';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import { ClienteFormComponent } from './clientes/cliente-form/cliente-form.component';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     ClientesComponent,
-    ClienteDetalleComponent
+    ClienteDetalleComponent,
+    ClienteFormComponent
   ],
   imports: [
     CommonModule,
     ClientesRoutingModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule
   ],
   providers: [
     provideHttpClient()
