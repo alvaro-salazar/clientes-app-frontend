@@ -1,0 +1,31 @@
+services:  
+  postgres:  
+    image: 'postgres:latest'  
+    environment:  
+      - 'POSTGRES_DB=curso_springboot'  
+      - 'POSTGRES_PASSWORD=a1b2c3d4'  
+      - 'POSTGRES_USER=devdb'  
+    ports:  
+      - '5432'  
+    networks:  
+      - red-backend-app  
+  
+  cliente-service:  
+    image: 'alvarosalazar/cliente-service:latest'  
+    ports:  
+      - '8080:8080'  
+    depends_on:  
+      - postgres  
+    environment:  
+      DB_URL: jdbc:postgresql://postgres/curso_springboot  
+      DB_USERNAME: devdb  
+      DB_PASSWORD: a1b2c3d4  
+      JPA_DDL: create-drop  
+    profiles:  
+      - app  
+    networks:  
+      - red-backend-app  
+  
+networks:  
+  red-backend-app:  
+    driver: bridge
