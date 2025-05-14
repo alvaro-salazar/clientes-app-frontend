@@ -7,7 +7,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './cliente-form.component.html'
 })
 export class ClienteFormComponent {
-  @Input() cliente: Cliente = { id: 0, nombre: '', apellido: '', email: '', createAt: '', foto: '', region: { id: 0, nombre: '' } };
+  @Input() cliente: Cliente = { id: 0, nombre: '', apellido: '', email: '', createAt: new Date(), foto: '', region: { id: 0, nombre: '' } };
   @Output() onSave = new EventEmitter<Cliente>();
 
   constructor(public activeModal: NgbActiveModal) {}

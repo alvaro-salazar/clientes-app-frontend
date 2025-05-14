@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Cliente} from '../model/cliente';
+import {Region} from '../model/region';
 
 @Injectable({
   providedIn: 'root'
@@ -36,4 +37,8 @@ export class ClienteService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  // Método para obtener la lista de regiones desde el backend
+  getRegiones(): Observable<Region[]> {
+    return this.http.get<Region[]>(`${this.apiUrl}/regiones`);
+  }
 }

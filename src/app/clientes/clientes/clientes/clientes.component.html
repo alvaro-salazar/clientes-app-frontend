@@ -1,12 +1,39 @@
-<div class="container">
-  <h2>Lista de Clientes</h2>
-  <ul class="list-group">
-    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let cliente of clientes">
-      <span>{{ cliente.nombre }} {{ cliente.apellido }}</span>
-      <div>
-        <fa-icon [icon]="faEdit" (click)="editCliente(cliente)"></fa-icon>
-        <fa-icon [icon]="faTrash" (click)="confirmDelete(cliente.id)"></fa-icon>
-      </div>
-    </li>
-  </ul>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Lista de Clientes</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <span>Clientes Registrados</span>
+      <button class="btn btn-light btn-sm" (click)="addCliente()">
+        <i class="fas fa-user-plus"></i> Añadir Cliente
+      </button>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let cliente of clientes">
+        <div class="d-flex align-items-center">
+          <img
+            *ngIf="cliente.foto"
+            [src]="cliente.foto"
+            alt="Foto de {{ cliente.nombre }}"
+            class="rounded-circle me-3"
+            width="50"
+            height="50"
+          />
+          <div>
+            <h5 class="mb-0">{{ cliente.nombre }} {{ cliente.apellido }}</h5>
+            <small class="text-muted">{{ cliente.email }}</small>
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-warning me-2" (click)="editCliente(cliente)">
+            <fa-icon [icon]="faEdit"></fa-icon> Editar
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="confirmDelete(cliente.id!)">
+            <fa-icon [icon]="faTrash"></fa-icon> Eliminar
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
+
