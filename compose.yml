@@ -46,6 +46,25 @@ services:
     networks:
       - red-backend-app
 
+  cliente-service-keycloak:
+    image: 'alvarosalazar/cliente-service:keycloak'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: jdbc:postgresql://postgres/curso_springboot
+      DB_USERNAME: devdb
+      DB_PASSWORD: a1b2c3d4
+      JPA_DDL: create-drop
+      # host.docker.internal resuelve al host — funciona cuando Keycloak
+      # corre en otro contenedor expuesto en el puerto 8090 del host
+      KEYCLOAK_ISSUER_URI: http://host.docker.internal:8090/realms/curso-springboot
+    profiles:
+      - keycloak
+    networks:
+      - red-backend-app
+
   producto-service:
     image: 'alvarosalazar/producto-service:latest'
     ports:
