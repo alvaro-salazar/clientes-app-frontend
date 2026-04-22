@@ -81,6 +81,7 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
     profiles:
       - app
+      - keycloak
     networks:
       - red-backend-app
 

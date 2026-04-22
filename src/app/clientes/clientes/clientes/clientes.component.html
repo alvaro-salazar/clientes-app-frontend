@@ -5,7 +5,7 @@
     <h4 class="fw-bold mb-0">
       <i class="bi bi-people me-2 text-primary"></i>Gestión de Clientes
     </h4>
-    <button class="btn btn-primary" (click)="addCliente()">
+    <button *ngIf="authService.isAdmin()" class="btn btn-primary" (click)="addCliente()">
       <i class="bi bi-person-plus me-1"></i>
       <span class="d-none d-sm-inline">Nuevo Cliente</span>
     </button>
@@ -76,11 +76,11 @@
               </span>
             </td>
             <td class="text-center">
-              <button class="btn btn-sm btn-outline-primary me-1"
+              <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-outline-primary me-1"
                       (click)="editCliente(cliente)" title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger"
+              <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-outline-danger"
                       (click)="confirmDelete(cliente.id!)" title="Eliminar">
                 <i class="bi bi-trash"></i>
               </button>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from '../model/cliente';
 import { ClienteService } from '../services/cliente.service';
+import { AuthService } from '../../../auth/auth.service';
 import Swal from 'sweetalert2';
 import { Region } from '../model/region';
 import { Page } from '../../../shared/page.model';
@@ -20,7 +21,7 @@ export class ClientesComponent implements OnInit {
   totalPaginas = 0;
   totalElementos = 0;
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(private clienteService: ClienteService, public authService: AuthService) {}
 
   ngOnInit(): void {
     this.cargar(0);
@@ -51,13 +52,20 @@ export class ClientesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then(result => {
       if (result.isConfirmed) {
-        this.clienteService.deleteCliente(id).subscribe(() => {
-          Swal.fire('Eliminado!', 'El cliente ha sido eliminado.', 'success');
-          // Si era el último de la página, retroceder
-          const nuevaPagina = this.clientes.length === 1 && this.paginaActual > 0
-            ? this.paginaActual - 1
-            : this.paginaActual;
-          this.cargar(nuevaPagina);
+        this.clienteService.deleteCliente(id).subscribe({
+          next: () => {
+            Swal.fire('Eliminado!', 'El cliente ha sido eliminado.', 'success');
+            const nuevaPagina = this.clientes.length === 1 && this.paginaActual > 0
+              ? this.paginaActual - 1
+              : this.paginaActual;
+            this.cargar(nuevaPagina);
+          },
+          error: (err) => {
+            const msg = err.status === 403
+              ? 'No tienes permisos para eliminar clientes.'
+              : 'Error al eliminar el cliente.';
+            Swal.fire('Error', msg, 'error');
+          }
         });
       }
     });
@@ -85,9 +93,15 @@ export class ClientesComponent implements OnInit {
         cliente.nombre = result.value!.nombre;
         cliente.apellido = result.value!.apellido;
         cliente.email = result.value!.email;
-        this.clienteService.updateCliente(cliente).subscribe(() => {
-          Swal.fire('Actualizado!', 'El cliente ha sido actualizado.', 'success');
-          this.cargar(this.paginaActual);
+        this.clienteService.updateCliente(cliente).subscribe({
+          next: () => {
+            Swal.fire('Actualizado!', 'El cliente ha sido actualizado.', 'success');
+            this.cargar(this.paginaActual);
+          },
+          error: (err) => {
+            const msg = err.status === 403 ? 'No tienes permisos para editar clientes.' : 'Error al actualizar el cliente.';
+            Swal.fire('Error', msg, 'error');
+          }
         });
       }
     });
@@ -139,9 +153,15 @@ export class ClientesComponent implements OnInit {
             region: result.value!.region,
             createAt: new Date()
           };
-          this.clienteService.createCliente(nuevoCliente).subscribe(() => {
-            Swal.fire('¡Creado!', 'El cliente ha sido creado exitosamente.', 'success');
-            this.cargar(this.paginaActual);
+          this.clienteService.createCliente(nuevoCliente).subscribe({
+            next: () => {
+              Swal.fire('¡Creado!', 'El cliente ha sido creado exitosamente.', 'success');
+              this.cargar(this.paginaActual);
+            },
+            error: (err) => {
+              const msg = err.status === 403 ? 'No tienes permisos para crear clientes.' : 'Error al crear el cliente.';
+              Swal.fire('Error', msg, 'error');
+            }
           });
         }
       });
