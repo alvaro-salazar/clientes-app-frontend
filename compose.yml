@@ -57,9 +57,12 @@ services:
       DB_USERNAME: devdb
       DB_PASSWORD: a1b2c3d4
       JPA_DDL: create-drop
-      # host.docker.internal resuelve al host — funciona cuando Keycloak
-      # corre en otro contenedor expuesto en el puerto 8090 del host
-      KEYCLOAK_ISSUER_URI: http://host.docker.internal:8090/realms/curso-springboot
+      # issuer-uri: debe coincidir con el 'iss' del token emitido por Keycloak
+      # (el browser siempre accede a Keycloak via localhost)
+      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/curso-springboot
+      # jwk-set-uri: la URL que el CONTENEDOR usa para descargar las claves publicas
+      # host.docker.internal resuelve al host donde corre Keycloak expuesto en 8090
+      KEYCLOAK_JWK_SET_URI: http://host.docker.internal:8090/realms/curso-springboot/protocol/openid-connect/certs
     profiles:
       - keycloak
     networks:
