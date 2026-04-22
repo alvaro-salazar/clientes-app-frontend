@@ -41,6 +41,10 @@
                data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle me-1"></i>
               {{ authService.getUsername() }}
+              <span *ngIf="authService.isAdmin()"
+                    class="badge bg-danger ms-1" style="font-size:10px;">ADMIN</span>
+              <span *ngIf="!authService.isAdmin() && authService.isAuthenticated()"
+                    class="badge bg-success ms-1" style="font-size:10px;">USER</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>

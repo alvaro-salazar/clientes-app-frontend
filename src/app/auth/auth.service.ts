@@ -1,28 +1,59 @@
 import { Injectable } from '@angular/core';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { authConfig } from './auth.config';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private readonly KEY_USER = 'auth_user';
-
-  login(username: string, password: string): boolean {
-    // Mock: cualquier usuario con contraseña no vacía puede ingresar
-    if (username && password) {
-      localStorage.setItem(this.KEY_USER, username);
-      return true;
-    }
-    return false;
+  constructor(private oauthService: OAuthService) {
+    this.configure();
   }
 
+  private configure(): void {
+    this.oauthService.configure(authConfig);
+
+    // loadDiscoveryDocumentAndTryLogin hace dos cosas:
+    // 1. Descarga la configuración OIDC de Keycloak
+    //    ({issuer}/.well-known/openid-configuration)
+    // 2. Si la URL tiene ?code=...&state=... (venimos del redirect de Keycloak),
+    //    intercambia automáticamente ese código por un access_token
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+  }
+
+  /** Redirige el navegador a la página de login de Keycloak */
+  login(): void {
+    this.oauthService.initCodeFlow();
+  }
+
+  /** Cierra sesión local y en Keycloak */
   logout(): void {
-    localStorage.removeItem(this.KEY_USER);
+    this.oauthService.logOut();
   }
 
+  /** true si hay un access_token válido y no expirado */
   isAuthenticated(): boolean {
-    return !!localStorage.getItem(this.KEY_USER);
+    return this.oauthService.hasValidAccessToken();
   }
 
+  /** Nombre de usuario desde el claim preferred_username del id_token */
   getUsername(): string | null {
-    return localStorage.getItem(this.KEY_USER);
+    const claims = this.oauthService.getIdentityClaims() as Record<string, unknown>;
+    return (claims?.['preferred_username'] as string) ?? null;
+  }
+
+  /** El access_token JWT — lo usa el interceptor para las peticiones HTTP */
+  get accessToken(): string {
+    return this.oauthService.getAccessToken();
+  }
+
+  /** Lista de roles del usuario desde realm_access.roles del id_token */
+  getRoles(): string[] {
+    const claims = this.oauthService.getIdentityClaims() as Record<string, unknown>;
+    const realmAccess = claims?.['realm_access'] as Record<string, unknown>;
+    return (realmAccess?.['roles'] as string[]) ?? [];
+  }
+
+  isAdmin(): boolean {
+    return this.getRoles().includes('ADMIN');
   }
 }

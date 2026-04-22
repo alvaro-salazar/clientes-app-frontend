@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -7,20 +6,16 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
-  username = '';
-  password = '';
-  error = '';
+export class LoginComponent implements OnInit {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService) {}
 
-  login(): void {
-    this.error = '';
-    const ok = this.authService.login(this.username, this.password);
-    if (ok) {
-      this.router.navigate(['/clientes']);
-    } else {
-      this.error = 'Usuario y contraseña son obligatorios.';
+  ngOnInit(): void {
+    // Si el usuario llega a /auth/login y ya está autenticado (volvió del redirect),
+    // no hace falta hacer nada — el guard ya lo enviará a la ruta protegida.
+    // Si no está autenticado, redirige directamente a Keycloak.
+    if (!this.authService.isAuthenticated()) {
+      this.authService.login();
     }
   }
 }

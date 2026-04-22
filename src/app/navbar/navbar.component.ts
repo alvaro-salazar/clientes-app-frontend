@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
@@ -9,10 +8,11 @@ import { AuthService } from '../auth/auth.service';
 })
 export class NavbarComponent {
 
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService) {}
 
   logout(): void {
+    // logOut() de OAuthService cierra la sesión local y redirige a Keycloak
+    // para cerrar también la sesión allí (Single Logout).
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
   }
 }

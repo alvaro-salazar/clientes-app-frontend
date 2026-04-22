@@ -1,13 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, HttpClientTestingModule, OAuthModule.forRoot()],
       declarations: [AppComponent],
       providers: [AuthService],
       schemas: [NO_ERRORS_SCHEMA]

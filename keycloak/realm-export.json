@@ -1,0 +1,68 @@
+{
+  "realm": "curso-springboot",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": false,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "roles": {
+    "realm": [
+      { "name": "USER",  "composite": false, "clientRole": false },
+      { "name": "ADMIN", "composite": false, "clientRole": false }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "cliente-service",
+      "name": "cliente-service",
+      "enabled": true,
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "protocol": "openid-connect",
+      "secret": "cliente-service-secret"
+    },
+    {
+      "clientId": "angular-client",
+      "name": "angular-client",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": ["http://localhost:4200/*"],
+      "webOrigins": ["http://localhost:4200"]
+    }
+  ],
+  "users": [
+    {
+      "username": "alice",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Alice",
+      "lastName": "Garcia",
+      "email": "alice@example.com",
+      "credentials": [
+        { "type": "password", "value": "alice123", "temporary": false }
+      ],
+      "realmRoles": ["USER"]
+    },
+    {
+      "username": "admin_user",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com",
+      "credentials": [
+        { "type": "password", "value": "admin123", "temporary": false }
+      ],
+      "realmRoles": ["ADMIN"]
+    }
+  ]
+}

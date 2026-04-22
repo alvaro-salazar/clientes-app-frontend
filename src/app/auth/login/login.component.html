@@ -1,47 +1,8 @@
 <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
-  <div class="card shadow-sm" style="width: 360px;">
-    <div class="card-header bg-primary text-white text-center py-3">
-      <h5 class="mb-0">
-        <i class="bi bi-person-lock me-2"></i>Iniciar Sesión
-      </h5>
+  <div class="text-center">
+    <div class="spinner-border text-primary mb-3" role="status">
+      <span class="visually-hidden">Cargando...</span>
     </div>
-    <div class="card-body p-4">
-      <div *ngIf="error" class="alert alert-danger py-2" role="alert">
-        {{ error }}
-      </div>
-      <form (ngSubmit)="login()" #loginForm="ngForm">
-        <div class="mb-3">
-          <label for="username" class="form-label fw-semibold">Usuario</label>
-          <input
-            id="username"
-            type="text"
-            class="form-control"
-            [(ngModel)]="username"
-            name="username"
-            placeholder="nombre de usuario"
-            required
-            autofocus
-          />
-        </div>
-        <div class="mb-4">
-          <label for="password" class="form-label fw-semibold">Contraseña</label>
-          <input
-            id="password"
-            type="password"
-            class="form-control"
-            [(ngModel)]="password"
-            name="password"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-        <button type="submit" class="btn btn-primary w-100">
-          Entrar
-        </button>
-      </form>
-      <p class="text-muted text-center mt-3 mb-0" style="font-size: 0.8rem;">
-        (Demo: cualquier usuario y contraseña no vacíos)
-      </p>
-    </div>
+    <p class="text-muted">Redirigiendo a Keycloak...</p>
   </div>
 </div>

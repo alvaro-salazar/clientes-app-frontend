@@ -1,15 +1,35 @@
-services:  
-  postgres:  
-    image: 'postgres:latest'  
-    environment:  
-      - 'POSTGRES_DB=curso_springboot'  
-      - 'POSTGRES_PASSWORD=a1b2c3d4'  
-      - 'POSTGRES_USER=devdb'  
-    ports:  
-      - '5432'  
-    networks:  
-      - red-backend-app  
-  
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=curso_springboot'
+      - 'POSTGRES_PASSWORD=a1b2c3d4'
+      - 'POSTGRES_USER=devdb'
+    ports:
+      - '5432'
+    networks:
+      - red-backend-app
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    ports:
+      - '8090:8080'
+    depends_on:
+      - postgres
+    networks:
+      - red-backend-app
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/health/ready || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
   cliente-service:
     image: 'alvarosalazar/cliente-service:latest'
     ports:
@@ -42,6 +62,6 @@ services:
     networks:
       - red-backend-app
 
-networks:  
-  red-backend-app:  
+networks:
+  red-backend-app:
     driver: bridge
