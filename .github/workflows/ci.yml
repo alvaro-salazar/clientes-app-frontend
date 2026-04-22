@@ -10,8 +10,8 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build Angular
+  test:
+    name: Tests Angular
     runs-on: ubuntu-latest
 
     steps:
@@ -27,5 +27,5 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Compilar (producción)
-        run: npx ng build --configuration production
+      - name: Ejecutar tests
+        run: npx ng test --watch=false --browsers=ChromeHeadless
