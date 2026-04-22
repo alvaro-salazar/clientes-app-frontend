@@ -10,22 +10,38 @@ services:
     networks:  
       - red-backend-app  
   
-  cliente-service:  
-    image: 'alvarosalazar/cliente-service:latest'  
-    ports:  
-      - '8080:8080'  
-    depends_on:  
-      - postgres  
-    environment:  
-      DB_URL: jdbc:postgresql://postgres/curso_springboot  
-      DB_USERNAME: devdb  
-      DB_PASSWORD: a1b2c3d4  
-      JPA_DDL: create-drop  
-    profiles:  
-      - app  
-    networks:  
-      - red-backend-app  
-  
+  cliente-service:
+    image: 'alvarosalazar/cliente-service:latest'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: jdbc:postgresql://postgres/curso_springboot
+      DB_USERNAME: devdb
+      DB_PASSWORD: a1b2c3d4
+      JPA_DDL: create-drop
+    profiles:
+      - app
+    networks:
+      - red-backend-app
+
+  producto-service:
+    image: 'alvarosalazar/producto-service:latest'
+    ports:
+      - '8082:8080'
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/curso_springboot
+      SPRING_DATASOURCE_USERNAME: devdb
+      SPRING_DATASOURCE_PASSWORD: a1b2c3d4
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    profiles:
+      - app
+    networks:
+      - red-backend-app
+
 networks:  
   red-backend-app:  
     driver: bridge

@@ -3,11 +3,11 @@
   <!-- Encabezado -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">
-      <i class="bi bi-people me-2 text-primary"></i>Gestión de Clientes
+      <i class="bi bi-box-seam me-2 text-primary"></i>Gestión de Productos
     </h4>
-    <button class="btn btn-primary" (click)="addCliente()">
-      <i class="bi bi-person-plus me-1"></i>
-      <span class="d-none d-sm-inline">Nuevo Cliente</span>
+    <button class="btn btn-primary" (click)="crear()">
+      <i class="bi bi-plus-lg me-1"></i>
+      <span class="d-none d-sm-inline">Nuevo Producto</span>
     </button>
   </div>
 
@@ -16,13 +16,13 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Cargando...</span>
     </div>
-    <p class="mt-2 text-muted">Cargando clientes...</p>
+    <p class="mt-2 text-muted">Cargando productos...</p>
   </div>
 
   <!-- Estado: error -->
   <div *ngIf="estado === 'error'" class="alert alert-danger d-flex align-items-center" role="alert">
     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    No se pudo conectar con el servicio de clientes.
+    No se pudo conectar con el servicio de productos.
     <button class="btn btn-sm btn-outline-danger ms-auto" (click)="cargar(0)">
       <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
     </button>
@@ -30,8 +30,8 @@
 
   <!-- Estado: vacío -->
   <div *ngIf="estado === 'vacio'" class="text-center py-5 text-muted">
-    <i class="bi bi-people fs-1"></i>
-    <p class="mt-2">No hay clientes registrados.</p>
+    <i class="bi bi-inbox fs-1"></i>
+    <p class="mt-2">No hay productos registrados.</p>
   </div>
 
   <!-- Estado: ok -->
@@ -41,47 +41,45 @@
         <thead class="table-primary">
           <tr>
             <th class="d-none d-lg-table-cell">#</th>
-            <th>Foto</th>
             <th>Nombre</th>
-            <th class="d-none d-md-table-cell">Email</th>
-            <th class="d-none d-lg-table-cell">Región</th>
+            <th class="d-none d-md-table-cell">Descripción</th>
+            <th class="text-end">Precio</th>
+            <th class="text-center d-none d-sm-table-cell">Stock</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let cliente of clientes">
-            <td class="d-none d-lg-table-cell text-muted small">{{ cliente.id }}</td>
+          <tr *ngFor="let p of productos">
+            <td class="d-none d-lg-table-cell text-muted small">{{ p.id }}</td>
             <td>
-              <img *ngIf="cliente.foto"
-                   [src]="cliente.foto"
-                   alt="Foto"
-                   class="rounded-circle"
-                   width="40" height="40" />
-              <span *ngIf="!cliente.foto"
-                    class="d-inline-flex align-items-center justify-content-center
-                           rounded-circle bg-primary text-white"
-                    style="width:40px;height:40px;font-size:1rem;font-weight:600;">
-                {{ cliente.nombre.charAt(0).toUpperCase() }}
-              </span>
+              <div class="fw-semibold">{{ p.nombre }}</div>
+              <small class="d-sm-none text-muted">
+                Stock:
+                <span class="badge"
+                  [class.bg-success]="p.stock > 10"
+                  [class.bg-warning]="p.stock > 0 && p.stock <= 10"
+                  [class.bg-danger]="p.stock === 0">
+                  {{ p.stock }}
+                </span>
+              </small>
             </td>
-            <td>
-              <div class="fw-semibold">{{ cliente.nombre }} {{ cliente.apellido }}</div>
-              <!-- Email visible solo en mobile (cuando la columna Email está oculta) -->
-              <small class="d-md-none text-muted">{{ cliente.email }}</small>
-            </td>
-            <td class="d-none d-md-table-cell text-muted small">{{ cliente.email }}</td>
-            <td class="d-none d-lg-table-cell">
-              <span *ngIf="cliente.region" class="badge bg-secondary">
-                {{ cliente.region.nombre }}
+            <td class="d-none d-md-table-cell text-muted small">{{ p.descripcion || '—' }}</td>
+            <td class="text-end">${{ p.precio | number:'1.2-2' }}</td>
+            <td class="text-center d-none d-sm-table-cell">
+              <span class="badge"
+                [class.bg-success]="p.stock > 10"
+                [class.bg-warning]="p.stock > 0 && p.stock <= 10"
+                [class.bg-danger]="p.stock === 0">
+                {{ p.stock }}
               </span>
             </td>
             <td class="text-center">
               <button class="btn btn-sm btn-outline-primary me-1"
-                      (click)="editCliente(cliente)" title="Editar">
+                      (click)="editar(p)" title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
               <button class="btn btn-sm btn-outline-danger"
-                      (click)="confirmDelete(cliente.id!)" title="Eliminar">
+                      (click)="eliminar(p)" title="Eliminar">
                 <i class="bi bi-trash"></i>
               </button>
             </td>

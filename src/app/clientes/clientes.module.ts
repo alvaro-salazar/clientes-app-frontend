@@ -8,6 +8,7 @@ import {provideHttpClient} from '@angular/common/http';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { ClienteFormComponent } from './clientes/cliente-form/cliente-form.component';
 import {FormsModule} from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import {FormsModule} from '@angular/forms';
     CommonModule,
     ClientesRoutingModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   providers: [
     provideHttpClient()

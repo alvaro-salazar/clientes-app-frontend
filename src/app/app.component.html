@@ -1,3 +1,5 @@
-<div class="container mt-4">
+<app-navbar *ngIf="mostrarNavbar"></app-navbar>
+<main class="main-content">
   <router-outlet></router-outlet>
-</div>
+</main>
+<app-footer *ngIf="mostrarNavbar"></app-footer>

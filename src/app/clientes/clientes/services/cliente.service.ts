@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Cliente} from '../model/cliente';
 import {Region} from '../model/region';
+import {Page} from '../../../shared/page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class ClienteService {
 
   getClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.apiUrl);
+  }
+
+  getClientesPaginado(page: number): Observable<Page<Cliente>> {
+    return this.http.get<Page<Cliente>>(`${this.apiUrl}/page/${page}`);
   }
 
   getCliente(id: string | null): Observable<Cliente> {
