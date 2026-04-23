@@ -1,0 +1,84 @@
+<div class="container py-4">
+
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">
+      <i class="bi bi-people-fill me-2 text-primary"></i>Gestión de Usuarios
+    </h4>
+    <button class="btn btn-primary" (click)="crear()">
+      <i class="bi bi-person-plus me-1"></i>
+      <span class="d-none d-sm-inline">Nuevo Usuario</span>
+    </button>
+  </div>
+
+  <!-- Estado: cargando -->
+  <div *ngIf="estado === 'cargando'" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Cargando usuarios...</p>
+  </div>
+
+  <!-- Estado: error -->
+  <div *ngIf="estado === 'error'" class="alert alert-danger d-flex align-items-center">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    No se pudo conectar con el servicio de usuarios.
+    <button class="btn btn-sm btn-outline-danger ms-auto" (click)="cargar()">
+      <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
+    </button>
+  </div>
+
+  <!-- Estado: vacío -->
+  <div *ngIf="estado === 'vacio'" class="text-center py-5 text-muted">
+    <i class="bi bi-people fs-1"></i>
+    <p class="mt-2">No hay usuarios registrados.</p>
+  </div>
+
+  <!-- Estado: ok -->
+  <div *ngIf="estado === 'ok'" class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-primary">
+          <tr>
+            <th>Usuario</th>
+            <th class="d-none d-md-table-cell">Email</th>
+            <th class="text-center">Rol</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuarios">
+            <td>
+              <div class="fw-semibold">{{ u.firstName }} {{ u.lastName }}</div>
+              <small class="text-muted">&#64;{{ u.username }}</small>
+            </td>
+            <td class="d-none d-md-table-cell text-muted small">{{ u.email }}</td>
+            <td class="text-center">
+              <span *ngFor="let rol of u.roles"
+                    class="badge me-1"
+                    [ngClass]="rolBadgeClass(rol)">
+                {{ rol }}
+              </span>
+              <span *ngIf="u.roles.length === 0" class="text-muted small">—</span>
+            </td>
+            <td class="text-center">
+              <span class="badge" [ngClass]="u.enabled ? 'bg-success' : 'bg-secondary'">
+                {{ u.enabled ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-1"
+                      (click)="editar(u)" title="Editar">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger"
+                      (click)="confirmarEliminar(u)" title="Eliminar">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
