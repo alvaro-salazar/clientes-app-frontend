@@ -27,7 +27,8 @@ export class AuthService {
 
   /** Cierra sesión local y en Keycloak */
   logout(): void {
-    this.oauthService.logOut();
+    const idToken = this.oauthService.getIdToken();
+    this.oauthService.logOut({ id_token_hint: idToken });
   }
 
   /** true si hay un access_token válido y no expirado */
