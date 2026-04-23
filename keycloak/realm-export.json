@@ -10,8 +10,16 @@
   "bruteForceProtected": false,
   "roles": {
     "realm": [
-      { "name": "USER",  "composite": false, "clientRole": false },
-      { "name": "ADMIN", "composite": false, "clientRole": false }
+      {
+        "name": "USER",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "ADMIN",
+        "composite": false,
+        "clientRole": false
+      }
     ]
   },
   "clients": [
@@ -35,8 +43,23 @@
       "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": false,
       "protocol": "openid-connect",
-      "redirectUris": ["http://localhost:4200/*"],
-      "webOrigins": ["http://localhost:4200"]
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200"
+      ]
+    },
+    {
+      "clientId": "usuario-service",
+      "enabled": true,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "usuario-service-secret",
+      "protocol": "openid-connect"
     }
   ],
   "users": [
@@ -48,9 +71,15 @@
       "lastName": "Garcia",
       "email": "alice@example.com",
       "credentials": [
-        { "type": "password", "value": "alice123", "temporary": false }
+        {
+          "type": "password",
+          "value": "alice123",
+          "temporary": false
+        }
       ],
-      "realmRoles": ["USER"]
+      "realmRoles": [
+        "USER"
+      ]
     },
     {
       "username": "admin_user",
@@ -60,9 +89,30 @@
       "lastName": "User",
       "email": "admin@example.com",
       "credentials": [
-        { "type": "password", "value": "admin123", "temporary": false }
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
       ],
-      "realmRoles": ["ADMIN"]
+      "realmRoles": [
+        "ADMIN"
+      ]
+    },
+    {
+      "username": "service-account-usuario-service",
+      "enabled": true,
+      "serviceAccountClientId": "usuario-service",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-users",
+          "query-users",
+          "query-groups",
+          "view-realm",
+          "manage-realm"
+        ]
+      }
     }
   ]
 }

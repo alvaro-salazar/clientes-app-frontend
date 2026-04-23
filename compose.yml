@@ -25,20 +25,6 @@ services:
     networks:
       - red-backend-app
 
-  keycloak-init:
-    image: python:3.12-alpine
-    volumes:
-      - ./keycloak/init-service-accounts.py:/init.py
-    command: python /init.py
-    depends_on:
-      keycloak:
-        condition: service_started
-    profiles:
-      - keycloak
-    networks:
-      - red-backend-app
-    restart: on-failure
-
   cliente-service:
     image: 'alvarosalazar/cliente-service:latest'
     ports:
@@ -81,9 +67,6 @@ services:
     image: 'alvarosalazar/usuario-service:latest'
     ports:
       - '8083:8083'
-    depends_on:
-      keycloak-init:
-        condition: service_completed_successfully
     environment:
       KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/curso-springboot
       KEYCLOAK_JWK_SET_URI: http://host.docker.internal:8090/realms/curso-springboot/protocol/openid-connect/certs
