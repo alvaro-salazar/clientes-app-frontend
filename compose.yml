@@ -24,11 +24,20 @@ services:
       - postgres
     networks:
       - red-backend-app
-    healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8080/health/ready || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 10
+
+  keycloak-init:
+    image: python:3.12-alpine
+    volumes:
+      - ./keycloak/init-service-accounts.py:/init.py
+    command: python /init.py
+    depends_on:
+      keycloak:
+        condition: service_started
+    profiles:
+      - keycloak
+    networks:
+      - red-backend-app
+    restart: on-failure
 
   cliente-service:
     image: 'alvarosalazar/cliente-service:latest'
@@ -63,6 +72,25 @@ services:
       # jwk-set-uri: la URL que el CONTENEDOR usa para descargar las claves publicas
       # host.docker.internal resuelve al host donde corre Keycloak expuesto en 8090
       KEYCLOAK_JWK_SET_URI: http://host.docker.internal:8090/realms/curso-springboot/protocol/openid-connect/certs
+    profiles:
+      - keycloak
+    networks:
+      - red-backend-app
+
+  usuario-service:
+    image: 'alvarosalazar/usuario-service:latest'
+    ports:
+      - '8083:8083'
+    depends_on:
+      keycloak-init:
+        condition: service_completed_successfully
+    environment:
+      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/curso-springboot
+      KEYCLOAK_JWK_SET_URI: http://host.docker.internal:8090/realms/curso-springboot/protocol/openid-connect/certs
+      KEYCLOAK_SERVER_URL: http://host.docker.internal:8090
+      KEYCLOAK_REALM: curso-springboot
+      KEYCLOAK_ADMIN_CLIENT_ID: usuario-service
+      KEYCLOAK_ADMIN_CLIENT_SECRET: usuario-service-secret
     profiles:
       - keycloak
     networks:
