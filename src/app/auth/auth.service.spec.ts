@@ -17,7 +17,8 @@ describe('AuthService', () => {
       'logOut',
       'hasValidAccessToken',
       'getAccessToken',
-      'getIdentityClaims'
+      'getIdentityClaims',
+      'getIdToken'
     ]);
 
     TestBed.configureTestingModule({
@@ -53,8 +54,10 @@ describe('AuthService', () => {
     expect(oauthSpy.initCodeFlow).toHaveBeenCalledTimes(1);
   });
 
-  it('logout() llama a logOut()', () => {
+  it('logout() llama a logOut() con id_token_hint', () => {
+    oauthSpy.getIdToken.and.returnValue('fake-id-token');
     service.logout();
+    expect(oauthSpy.getIdToken).toHaveBeenCalledTimes(1);
     expect(oauthSpy.logOut).toHaveBeenCalledTimes(1);
   });
 
