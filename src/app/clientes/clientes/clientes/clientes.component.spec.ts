@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import { ClientesComponent } from './clientes.component';
 
 describe('ClientesComponent', () => {
@@ -9,7 +10,7 @@ describe('ClientesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, OAuthModule.forRoot()],
       declarations: [ClientesComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

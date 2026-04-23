@@ -46,11 +46,19 @@ export class AuthService {
     return this.oauthService.getAccessToken();
   }
 
-  /** Lista de roles del usuario desde realm_access.roles del id_token */
+  /** Lista de roles desde realm_access.roles del access_token.
+   *  Keycloak no incluye realm_access en el id_token por defecto,
+   *  por eso decodificamos el access_token (JWT) directamente. */
   getRoles(): string[] {
-    const claims = this.oauthService.getIdentityClaims() as Record<string, unknown>;
-    const realmAccess = claims?.['realm_access'] as Record<string, unknown>;
-    return (realmAccess?.['roles'] as string[]) ?? [];
+    const token = this.oauthService.getAccessToken();
+    if (!token) return [];
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const realmAccess = payload?.['realm_access'] as Record<string, unknown>;
+      return (realmAccess?.['roles'] as string[]) ?? [];
+    } catch {
+      return [];
+    }
   }
 
   isAdmin(): boolean {

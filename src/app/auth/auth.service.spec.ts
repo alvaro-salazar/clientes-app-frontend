@@ -68,29 +68,26 @@ describe('AuthService', () => {
     expect(service.getUsername()).toBeNull();
   });
 
-  it('getRoles() extrae roles de realm_access', () => {
-    oauthSpy.getIdentityClaims.and.returnValue({
-      realm_access: { roles: ['USER', 'offline_access'] }
-    });
+  it('getRoles() extrae roles del access_token', () => {
+    const payload = btoa(JSON.stringify({ realm_access: { roles: ['USER', 'offline_access'] } }));
+    oauthSpy.getAccessToken.and.returnValue(`header.${payload}.sig`);
     expect(service.getRoles()).toContain('USER');
   });
 
-  it('getRoles() devuelve [] si no hay claims', () => {
-    oauthSpy.getIdentityClaims.and.returnValue({});
+  it('getRoles() devuelve [] si no hay access_token', () => {
+    oauthSpy.getAccessToken.and.returnValue('');
     expect(service.getRoles()).toEqual([]);
   });
 
-  it('isAdmin() devuelve true si tiene rol ADMIN', () => {
-    oauthSpy.getIdentityClaims.and.returnValue({
-      realm_access: { roles: ['ADMIN'] }
-    });
+  it('isAdmin() devuelve true si el access_token tiene rol ADMIN', () => {
+    const payload = btoa(JSON.stringify({ realm_access: { roles: ['ADMIN'] } }));
+    oauthSpy.getAccessToken.and.returnValue(`header.${payload}.sig`);
     expect(service.isAdmin()).toBeTrue();
   });
 
   it('isAdmin() devuelve false para rol USER', () => {
-    oauthSpy.getIdentityClaims.and.returnValue({
-      realm_access: { roles: ['USER'] }
-    });
+    const payload = btoa(JSON.stringify({ realm_access: { roles: ['USER'] } }));
+    oauthSpy.getAccessToken.and.returnValue(`header.${payload}.sig`);
     expect(service.isAdmin()).toBeFalse();
   });
 });

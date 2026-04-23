@@ -45,7 +45,7 @@
             <th>Nombre</th>
             <th class="d-none d-md-table-cell">Email</th>
             <th class="d-none d-lg-table-cell">Región</th>
-            <th class="text-center">Acciones</th>
+            <th *ngIf="authService.isAdmin()" class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -75,12 +75,12 @@
                 {{ cliente.region.nombre }}
               </span>
             </td>
-            <td class="text-center">
-              <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-outline-primary me-1"
+            <td *ngIf="authService.isAdmin()" class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-1"
                       (click)="editCliente(cliente)" title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-outline-danger"
+              <button class="btn btn-sm btn-outline-danger"
                       (click)="confirmDelete(cliente.id!)" title="Eliminar">
                 <i class="bi bi-trash"></i>
               </button>
