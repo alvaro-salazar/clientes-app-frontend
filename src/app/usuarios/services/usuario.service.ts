@@ -10,8 +10,10 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
-  getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.url);
+  getUsuarios(page = 0, size = 10): Observable<{ usuarios: Usuario[]; total: number }> {
+    return this.http.get<{ usuarios: Usuario[]; total: number }>(
+      `${this.url}?page=${page}&size=${size}`
+    );
   }
 
   crearUsuario(dto: {

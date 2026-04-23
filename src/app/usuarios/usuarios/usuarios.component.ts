@@ -54,6 +54,15 @@ export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
   estado: Estado = 'cargando';
 
+  // Paginación
+  page  = 0;
+  size  = 10;
+  total = 0;
+
+  get totalPages(): number { return Math.ceil(this.total / this.size); }
+  get desde(): number { return this.page * this.size + 1; }
+  get hasta(): number { return Math.min((this.page + 1) * this.size, this.total); }
+
   constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
@@ -62,13 +71,27 @@ export class UsuariosComponent implements OnInit {
 
   cargar(): void {
     this.estado = 'cargando';
-    this.usuarioService.getUsuarios().subscribe({
+    this.usuarioService.getUsuarios(this.page, this.size).subscribe({
       next: (data) => {
-        this.usuarios = data;
-        this.estado = data.length === 0 ? 'vacio' : 'ok';
+        this.usuarios = data.usuarios;
+        this.total    = data.total;
+        this.estado   = data.usuarios.length === 0 ? 'vacio' : 'ok';
       },
       error: () => { this.estado = 'error'; }
     });
+  }
+
+  irPagina(p: number): void {
+    if (p < 0 || p >= this.totalPages) return;
+    this.page = p;
+    this.cargar();
+  }
+
+  /** Devuelve hasta 5 números de página centrados en la página actual. */
+  paginas(): number[] {
+    const start = Math.max(0, Math.min(this.page - 2, this.totalPages - 5));
+    const end   = Math.min(this.totalPages, start + 5);
+    return Array.from({ length: end - start }, (_, i) => start + i);
   }
 
   rolBadgeClass(rol: string): string {
