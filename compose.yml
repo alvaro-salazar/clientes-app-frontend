@@ -64,7 +64,7 @@ services:
       - red-backend-app
 
   usuario-service:
-    image: 'alvarosalazar/usuario-service:latest'
+    image: 'alvarosalazar/usuario-service:codelab-04'
     ports:
       - '8083:8083'
     environment:
