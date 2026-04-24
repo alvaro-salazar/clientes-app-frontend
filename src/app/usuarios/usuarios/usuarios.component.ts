@@ -261,13 +261,22 @@ export class UsuariosComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
-    const formData = new FormData();
-    formData.append('archivo', input.files[0]);
+    const file = input.files[0];
+    const reader = new FileReader();
 
-    this.usuarioService.subirFoto(userId, formData).subscribe({
-      next: () => this.cargar(),
-      error: (err) => console.error('Error al subir foto', err)
-    });
+    // Leer el archivo a ArrayBuffer antes de enviar para evitar que el
+    // re-render de *ngFor invalide el stream del File (bug en Safari).
+    reader.onload = (e) => {
+      const blob = new Blob([e.target!.result as ArrayBuffer], { type: file.type });
+      const formData = new FormData();
+      formData.append('archivo', blob, file.name);
+      this.usuarioService.subirFoto(userId, formData).subscribe({
+        next: () => this.cargar(),
+        error: (err) => console.error('Error al subir foto', err)
+      });
+    };
+
+    reader.readAsArrayBuffer(file);
   }
 
   confirmarEliminar(usuario: Usuario): void {

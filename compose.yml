@@ -63,6 +63,39 @@ services:
     networks:
       - red-backend-app
 
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio-data:/data
+    profiles:
+      - keycloak
+    networks:
+      - red-backend-app
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        sleep 5;
+        mc alias set local http://minio:9000 minioadmin minioadmin;
+        mc mb --ignore-existing local/avatars;
+        mc anonymous set download local/avatars;
+        exit 0;
+      "
+    profiles:
+      - keycloak
+    networks:
+      - red-backend-app
+
   usuario-service:
     image: 'alvarosalazar/usuario-service:latest'
     ports:
@@ -74,6 +107,13 @@ services:
       KEYCLOAK_REALM: curso-springboot
       KEYCLOAK_ADMIN_CLIENT_ID: usuario-service
       KEYCLOAK_ADMIN_CLIENT_SECRET: usuario-service-secret
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: avatars
+      MINIO_PUBLIC_URL: http://localhost:9000
+    depends_on:
+      - minio
     profiles:
       - keycloak
     networks:
@@ -99,3 +139,6 @@ services:
 networks:
   red-backend-app:
     driver: bridge
+
+volumes:
+  minio-data:
