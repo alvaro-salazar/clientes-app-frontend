@@ -65,4 +65,11 @@ export class AuthService {
   isAdmin(): boolean {
     return this.getRoles().includes('ADMIN');
   }
+
+  /** URL de la foto de perfil desde el claim foto_url del id_token.
+   *  Devuelve null si el usuario no tiene foto asignada todavía. */
+  getFotoUrl(): string | null {
+    const claims = this.oauthService.getIdentityClaims() as Record<string, unknown>;
+    return (claims?.['foto_url'] as string) ?? null;
+  }
 }

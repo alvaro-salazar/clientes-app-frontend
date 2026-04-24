@@ -257,6 +257,19 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
+  onFotoSeleccionada(event: Event, userId: string): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const formData = new FormData();
+    formData.append('archivo', input.files[0]);
+
+    this.usuarioService.subirFoto(userId, formData).subscribe({
+      next: () => this.cargar(),
+      error: (err) => console.error('Error al subir foto', err)
+    });
+  }
+
   confirmarEliminar(usuario: Usuario): void {
     Swal.fire({
       title: '¿Eliminar usuario?',

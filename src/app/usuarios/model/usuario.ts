@@ -6,4 +6,5 @@ export interface Usuario {
   lastName: string;
   enabled: boolean;
   roles: string[];
+  fotoUrl?: string;  // URL de la foto de perfil. Opcional: puede no existir.
 }

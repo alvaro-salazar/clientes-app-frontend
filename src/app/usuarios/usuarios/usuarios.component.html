@@ -42,6 +42,7 @@
             <th class="d-none d-md-table-cell">Email</th>
             <th class="text-center">Rol</th>
             <th class="text-center">Estado</th>
+            <th class="text-center">Foto</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -64,6 +65,24 @@
               <span class="badge" [ngClass]="u.enabled ? 'bg-success' : 'bg-secondary'">
                 {{ u.enabled ? 'Activo' : 'Inactivo' }}
               </span>
+            </td>
+            <td class="text-center">
+              <img *ngIf="u.fotoUrl"
+                   [src]="u.fotoUrl"
+                   alt="Avatar"
+                   class="rounded-circle"
+                   style="width:36px; height:36px; object-fit:cover;">
+              <i *ngIf="!u.fotoUrl"
+                 class="bi bi-person-circle text-secondary fs-4"></i>
+              <label class="btn btn-sm btn-outline-secondary ms-1"
+                     [for]="'foto-' + u.id" title="Cambiar foto">
+                <i class="bi bi-camera"></i>
+              </label>
+              <input type="file"
+                     [id]="'foto-' + u.id"
+                     accept="image/*"
+                     style="display:none"
+                     (change)="onFotoSeleccionada($event, u.id!)">
             </td>
             <td class="text-center">
               <button class="btn btn-sm btn-outline-primary me-1"

@@ -33,4 +33,11 @@ export class UsuarioService {
   eliminarUsuario(id: string): Observable<{ mensaje: string }> {
     return this.http.delete<{ mensaje: string }>(`${this.url}/${id}`);
   }
+
+  subirFoto(userId: string, formData: FormData): Observable<{ mensaje: string; fotoUrl: string }> {
+    return this.http.post<{ mensaje: string; fotoUrl: string }>(
+      `${this.url}/${userId}/foto`,
+      formData
+    );
+  }
 }

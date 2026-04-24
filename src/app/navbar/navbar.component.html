@@ -42,9 +42,17 @@
       <ul class="navbar-nav ms-auto">
         <ng-container *ngIf="authService.isAuthenticated(); else loginBtn">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button"
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button"
                data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle me-1"></i>
+              <ng-container *ngIf="authService.getFotoUrl(); else iconoGenerico">
+                <img [src]="authService.getFotoUrl()"
+                     alt="Foto de perfil"
+                     class="rounded-circle border border-white"
+                     style="width:30px; height:30px; object-fit:cover;">
+              </ng-container>
+              <ng-template #iconoGenerico>
+                <i class="bi bi-person-circle me-1"></i>
+              </ng-template>
               {{ authService.getUsername() }}
               <span *ngIf="authService.isAdmin()"
                     class="badge bg-danger ms-1" style="font-size:10px;">ADMIN</span>
