@@ -67,8 +67,8 @@ services:
     image: minio/minio:latest
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     ports:
       - '9000:9000'
       - '9001:9001'
@@ -83,10 +83,13 @@ services:
     image: minio/mc:latest
     depends_on:
       - minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     entrypoint: >
       /bin/sh -c "
         sleep 5;
-        mc alias set local http://minio:9000 minioadmin minioadmin;
+        mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD;
         mc mb --ignore-existing local/avatars;
         mc anonymous set download local/avatars;
         exit 0;
@@ -97,7 +100,7 @@ services:
       - red-backend-app
 
   usuario-service:
-    image: 'alvarosalazar/usuario-service:codelab-05'
+    image: '${USUARIO_SERVICE_IMAGE:-alvarosalazar/usuario-service:codelab-05}'
     ports:
       - '8083:8083'
     environment:
@@ -106,10 +109,10 @@ services:
       KEYCLOAK_SERVER_URL: http://host.docker.internal:8090
       KEYCLOAK_REALM: curso-springboot
       KEYCLOAK_ADMIN_CLIENT_ID: usuario-service
-      KEYCLOAK_ADMIN_CLIENT_SECRET: usuario-service-secret
+      KEYCLOAK_ADMIN_CLIENT_SECRET: ${KEYCLOAK_ADMIN_CLIENT_SECRET}
       MINIO_ENDPOINT: http://minio:9000
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       MINIO_BUCKET: avatars
       MINIO_PUBLIC_URL: http://localhost:9000
     depends_on:
