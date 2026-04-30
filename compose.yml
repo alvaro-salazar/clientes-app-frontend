@@ -11,7 +11,7 @@ services:
       - red-backend-app  
   
   cliente-service:  
-    image: 'alvarosalazar/cliente-service:latest'  
+    image: 'alvarosalazar/cliente-service:codelab-06'  
     ports:  
       - '8080:8080'  
     depends_on:  
