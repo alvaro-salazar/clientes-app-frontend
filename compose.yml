@@ -67,6 +67,8 @@ services:
     image: 'alvarosalazar/usuario-service:codelab-04'
     ports:
       - '8083:8083'
+    depends_on:
+      - keycloak
     environment:
       KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/curso-springboot
       KEYCLOAK_JWK_SET_URI: http://host.docker.internal:8090/realms/curso-springboot/protocol/openid-connect/certs
