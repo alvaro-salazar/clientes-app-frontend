@@ -3,11 +3,11 @@
   <!-- Encabezado -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">
-      <i class="bi bi-people me-2 text-primary"></i>Gestión de Clientes
+      <i class="bi bi-people me-2 text-primary"></i><ng-container i18n="@@clientes.titulo">Gestión de Clientes</ng-container>
     </h4>
     <button *ngIf="authService.isAdmin()" class="btn btn-primary" (click)="addCliente()">
       <i class="bi bi-person-plus me-1"></i>
-      <span class="d-none d-sm-inline">Nuevo Cliente</span>
+      <span class="d-none d-sm-inline" i18n="@@clientes.nuevo">Nuevo Cliente</span>
     </button>
   </div>
 
@@ -16,22 +16,22 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Cargando...</span>
     </div>
-    <p class="mt-2 text-muted">Cargando clientes...</p>
+    <p class="mt-2 text-muted" i18n="@@clientes.cargando">Cargando clientes...</p>
   </div>
 
   <!-- Estado: error -->
   <div *ngIf="estado === 'error'" class="alert alert-danger d-flex align-items-center" role="alert">
     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    No se pudo conectar con el servicio de clientes.
+    <ng-container i18n="@@clientes.error">No se pudo conectar con el servicio de clientes.</ng-container>
     <button class="btn btn-sm btn-outline-danger ms-auto" (click)="cargar(0)">
-      <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
+      <i class="bi bi-arrow-clockwise me-1"></i><ng-container i18n="@@comun.reintentar">Reintentar</ng-container>
     </button>
   </div>
 
   <!-- Estado: vacío -->
   <div *ngIf="estado === 'vacio'" class="text-center py-5 text-muted">
     <i class="bi bi-people fs-1"></i>
-    <p class="mt-2">No hay clientes registrados.</p>
+    <p class="mt-2" i18n="@@clientes.vacio">No hay clientes registrados.</p>
   </div>
 
   <!-- Estado: ok -->
@@ -41,11 +41,11 @@
         <thead class="table-primary">
           <tr>
             <th class="d-none d-lg-table-cell">#</th>
-            <th>Foto</th>
-            <th>Nombre</th>
-            <th class="d-none d-md-table-cell">Email</th>
-            <th class="d-none d-lg-table-cell">Región</th>
-            <th *ngIf="authService.isAdmin()" class="text-center">Acciones</th>
+            <th i18n="@@clientes.col.foto">Foto</th>
+            <th i18n="@@clientes.col.nombre">Nombre</th>
+            <th class="d-none d-md-table-cell" i18n="@@clientes.col.email">Email</th>
+            <th class="d-none d-lg-table-cell" i18n="@@clientes.col.region">Región</th>
+            <th *ngIf="authService.isAdmin()" class="text-center" i18n="@@comun.col.acciones">Acciones</th>
           </tr>
         </thead>
         <tbody>

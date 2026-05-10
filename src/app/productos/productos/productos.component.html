@@ -3,11 +3,11 @@
   <!-- Encabezado -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">
-      <i class="bi bi-box-seam me-2 text-primary"></i>Gestión de Productos
+      <i class="bi bi-box-seam me-2 text-primary"></i><ng-container i18n="@@productos.titulo">Gestión de Productos</ng-container>
     </h4>
     <button class="btn btn-primary" (click)="crear()">
       <i class="bi bi-plus-lg me-1"></i>
-      <span class="d-none d-sm-inline">Nuevo Producto</span>
+      <span class="d-none d-sm-inline" i18n="@@productos.nuevo">Nuevo Producto</span>
     </button>
   </div>
 
@@ -16,22 +16,22 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Cargando...</span>
     </div>
-    <p class="mt-2 text-muted">Cargando productos...</p>
+    <p class="mt-2 text-muted" i18n="@@productos.cargando">Cargando productos...</p>
   </div>
 
   <!-- Estado: error -->
   <div *ngIf="estado === 'error'" class="alert alert-danger d-flex align-items-center" role="alert">
     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    No se pudo conectar con el servicio de productos.
+    <ng-container i18n="@@productos.error">No se pudo conectar con el servicio de productos.</ng-container>
     <button class="btn btn-sm btn-outline-danger ms-auto" (click)="cargar(0)">
-      <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
+      <i class="bi bi-arrow-clockwise me-1"></i><ng-container i18n="@@comun.reintentar">Reintentar</ng-container>
     </button>
   </div>
 
   <!-- Estado: vacío -->
   <div *ngIf="estado === 'vacio'" class="text-center py-5 text-muted">
     <i class="bi bi-inbox fs-1"></i>
-    <p class="mt-2">No hay productos registrados.</p>
+    <p class="mt-2" i18n="@@productos.vacio">No hay productos registrados.</p>
   </div>
 
   <!-- Estado: ok -->
@@ -41,11 +41,11 @@
         <thead class="table-primary">
           <tr>
             <th class="d-none d-lg-table-cell">#</th>
-            <th>Nombre</th>
-            <th class="d-none d-md-table-cell">Descripción</th>
-            <th class="text-end">Precio</th>
-            <th class="text-center d-none d-sm-table-cell">Stock</th>
-            <th class="text-center">Acciones</th>
+            <th i18n="@@productos.col.nombre">Nombre</th>
+            <th class="d-none d-md-table-cell" i18n="@@productos.col.descripcion">Descripción</th>
+            <th class="text-end" i18n="@@productos.col.precio">Precio</th>
+            <th class="text-center d-none d-sm-table-cell" i18n="@@productos.col.stock">Stock</th>
+            <th class="text-center" i18n="@@comun.col.acciones">Acciones</th>
           </tr>
         </thead>
         <tbody>
